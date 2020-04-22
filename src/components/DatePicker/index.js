@@ -11,12 +11,14 @@ import {
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 
-const DatePickerInput = ({value, onChange, placeholder}) => {
+const DatePickerInput = ({value, onChange, placeholder, label}) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-  const [currentDate, setCurrentDate] = useState(value);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
-    setCurrentDate(value);
+    if (value) {
+      setCurrentDate(moment(value).toDate());
+    }
   }, [value]);
 
   const toggleDatePickerModal = () => {
@@ -24,7 +26,7 @@ const DatePickerInput = ({value, onChange, placeholder}) => {
   };
 
   const handleSubmit = () => {
-    onChange(currentDate || new Date());
+    onChange(currentDate);
     toggleDatePickerModal();
   };
 
@@ -37,7 +39,7 @@ const DatePickerInput = ({value, onChange, placeholder}) => {
               <Button title="OK" onPress={handleSubmit} />
             </View>
             <DatePicker
-              date={currentDate || new Date()}
+              date={currentDate}
               onDateChange={setCurrentDate}
               mode="date"
             />
@@ -47,9 +49,12 @@ const DatePickerInput = ({value, onChange, placeholder}) => {
       <TouchableOpacity
         style={styles.inputContainer}
         onPress={toggleDatePickerModal}>
-        <Text style={value ? styles.text : styles.placeholder}>
-          {value ? moment(value).format('DD.MM.YYYY') : placeholder}
-        </Text>
+        {label && <Text style={styles.label}>{label}</Text>}
+        <View style={styles.valueContainer}>
+          <Text style={value ? styles.text : styles.placeholder}>
+            {value ? moment(value).format('DD.MM.YYYY') : placeholder}
+          </Text>
+        </View>
       </TouchableOpacity>
     </>
   );
@@ -64,7 +69,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   inputContainer: {
-    height: 40,
     marginVertical: 10,
     marginHorizontal: 20,
     borderBottomColor: 'grey',
@@ -83,14 +87,22 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     width: '100%',
   },
+  valueContainer: {
+    height: 40,
+    justifyContent: 'center',
+  },
   text: {
     fontSize: 18,
-    height: 40,
     color: 'black',
   },
   placeholder: {
     fontSize: 18,
     color: 'grey',
+  },
+  label: {
+    fontSize: 16,
+    color: '#86939e',
+    fontWeight: 'bold',
   },
 });
 

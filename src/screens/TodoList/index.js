@@ -1,10 +1,17 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {SafeAreaView, StyleSheet, ScrollView, Button} from 'react-native';
+import {selectTodoList} from '../../store/todoList/selectors';
+import {fetchTodoListAction} from '../../store/todoList/sagas';
 import TodoItem from './TodoItem';
-import {getTodoItems} from '../../common/mock/todoItems';
 
 const TodoList = ({navigation}) => {
-  const [todoItems] = useState(getTodoItems());
+  const dispatch = useDispatch();
+  const todoItems = useSelector(selectTodoList);
+
+  useEffect(() => {
+    dispatch(fetchTodoListAction());
+  }, [dispatch]);
 
   const handleClickCreate = useCallback(() => {
     navigation.navigate('Create todo');

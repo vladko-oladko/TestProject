@@ -10,9 +10,9 @@ const TodoItem = ({data}) => {
     <View style={styles.container}>
       <View style={[styles.row, styles.header]}>
         <Text style={styles.title}>{title}</Text>
-        <Text>{moment(due).format('DD.MM.YYYY')}</Text>
+        <Text>{due && moment(due).format('DD.MM.YYYY')}</Text>
       </View>
-      <View style={styles.description}>
+      <View style={[styles.row, styles.description]}>
         <Text>{description}</Text>
       </View>
       <View style={[styles.row, styles.priority]}>
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: 5,
+    justifyContent: 'flex-start',
   },
   priority: {
     justifyContent: 'flex-end',
