@@ -1,20 +1,16 @@
 import React from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {Input} from 'react-native-elements';
 
-const FormInput = ({name, placeholder, ...rest}) => (
+const FormInput = (props) => (
   <View style={styles.inputContainer}>
-    <TextInput
-      {...rest}
-      name={name}
-      placeholder={placeholder}
-      style={styles.input}
-    />
+    <Input {...props} />
   </View>
 );
 
 const styles = StyleSheet.create({
   inputContainer: {
-    margin: 15,
+    margin: 10,
   },
 });
 

@@ -4,7 +4,7 @@ import TodoItem from './TodoItem';
 import {getTodoItems} from '../../common/mock/todoItems';
 
 const TodoList = ({navigation}) => {
-  const [todoItems, setTodoItems] = useState(getTodoItems());
+  const [todoItems] = useState(getTodoItems());
 
   const handleClickCreate = useCallback(() => {
     navigation.navigate('Create todo');

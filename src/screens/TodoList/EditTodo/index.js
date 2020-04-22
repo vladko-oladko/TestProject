@@ -12,7 +12,7 @@ const schema = Yup.object().shape({
   priority: Yup.number().min(0).max(5),
 });
 
-const CreateTodo = () => {
+const EditTodo = () => {
   return (
     <SafeAreaView>
       <Formik
@@ -49,11 +49,7 @@ const CreateTodo = () => {
               placeholder="Enter priority"
             />
             <View style={styles.buttonContainer}>
-              <Button
-                title="Create"
-                onPress={handleSubmit}
-                disabled={!isValid}
-              />
+              <Button title="Edit" onPress={handleSubmit} disabled={!isValid} />
             </View>
           </>
         )}
@@ -71,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateTodo;
+export default EditTodo;
