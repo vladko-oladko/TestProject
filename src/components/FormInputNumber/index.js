@@ -12,7 +12,7 @@ const FormInputNumber = ({value, onChange, ...props}) => {
     <View style={styles.inputContainer}>
       <Input
         {...props}
-        value={value !== undefined ? value.toString() : ''}
+        value={(value !== undefined && value !== null) ? value.toString() : ''}
         onChangeText={handleChangeText}
         placeholderTextColor="grey"
         keyboardType="numeric"

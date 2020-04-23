@@ -43,21 +43,25 @@ const EditTodo = ({route, navigation}) => {
         {({values, handleChange, handleSubmit, setFieldValue, isValid}) => (
           <>
             <FormInput
+              label="Title *"
               value={values.title}
               onChangeText={handleChange('title')}
               placeholder="Enter title *"
             />
             <FormInput
+              label="Description *"
               value={values.description}
               onChangeText={handleChange('description')}
               placeholder="Enter description *"
             />
             <DatePicker
+              label="Due date"
               value={values.due}
               onChange={(date) => setFieldValue('due', moment(date).format())}
               placeholder="Enter due date"
             />
             <FormInputNumber
+              label="Priority"
               value={values.priority}
               onChange={(value) => setFieldValue('priority', value)}
               placeholder="Enter priority"
