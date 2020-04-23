@@ -9,6 +9,7 @@ import {selectIsLoggedUser} from '../../store/user/selectors';
 import Login from '../Login';
 import TodoList from '../TodoList';
 import CreateTodo from '../TodoList/CreateTodo';
+import EditTodo from '../TodoList/EditTodo';
 
 const Main = () => {
   const Stack = useMemo(() => createStackNavigator(), []);
@@ -33,6 +34,7 @@ const Main = () => {
               <>
                 <Stack.Screen name="Todo list" component={TodoList} />
                 <Stack.Screen name="Create todo" component={CreateTodo} />
+                <Stack.Screen name="Edit todo" component={EditTodo} />
               </>
             )) || <Stack.Screen name="Login" component={Login} />}
           </Stack.Navigator>

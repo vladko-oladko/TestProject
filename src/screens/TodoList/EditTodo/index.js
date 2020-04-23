@@ -1,30 +1,45 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import {useDispatch} from 'react-redux';
 import {SafeAreaView, StyleSheet, View, Button} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import moment from 'moment';
+
+import {editTodoAction} from '../../../store/todoList/slice';
 import FormInput from '../../../components/FormInput';
+import FormInputNumber from '../../../components/FormInputNumber';
 import DatePicker from '../../../components/DatePicker';
 
 const schema = Yup.object().shape({
   title: Yup.string().required('Required'),
   description: Yup.string().required('Required'),
-  due: Yup.date(),
+  due: Yup.string(),
   priority: Yup.number().min(0).max(5),
 });
 
-const EditTodo = () => {
+const EditTodo = ({route, navigation}) => {
+  const dispatch = useDispatch();
+  const {todoData} = route.params;
+
+  const onSubmit = useCallback(
+    (values) => {
+      dispatch(editTodoAction({id: todoData.id, ...values}));
+      navigation.navigate('Todo list');
+    },
+    [dispatch, navigation, todoData],
+  );
+
   return (
     <SafeAreaView>
       <Formik
         initialValues={{
-          title: null,
-          due: null,
-          description: null,
-          priority: 0,
+          title: todoData.title,
+          due: todoData.due,
+          description: todoData.description,
+          priority: todoData.priority,
         }}
         validationSchema={schema}
-        validateOnMount
-        onSubmit={(values) => console.log(values)}>
+        onSubmit={onSubmit}>
         {({values, handleChange, handleSubmit, setFieldValue, isValid}) => (
           <>
             <FormInput
@@ -39,13 +54,12 @@ const EditTodo = () => {
             />
             <DatePicker
               value={values.due}
-              onChange={(date) => setFieldValue('due', date)}
+              onChange={(date) => setFieldValue('due', moment(date).format())}
               placeholder="Enter due date"
             />
-            <FormInput
+            <FormInputNumber
               value={values.priority}
-              onChangeText={handleChange('priority')}
-              keyboardType="numeric"
+              onChange={(value) => setFieldValue('priority', value)}
               placeholder="Enter priority"
             />
             <View style={styles.buttonContainer}>

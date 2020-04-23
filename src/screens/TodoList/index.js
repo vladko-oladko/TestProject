@@ -17,6 +17,15 @@ const TodoList = ({navigation}) => {
     navigation.navigate('Create todo');
   }, [navigation]);
 
+  const handleClickEdit = useCallback(
+    (todoData) => {
+      navigation.navigate('Edit todo', {
+        todoData,
+      });
+    },
+    [navigation],
+  );
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <Button onPress={handleClickCreate} title="New" />,
@@ -29,7 +38,11 @@ const TodoList = ({navigation}) => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContainer}>
         {todoItems.map((element) => (
-          <TodoItem data={element} key={element.id} />
+          <TodoItem
+            data={element}
+            key={element.id}
+            onPressEdit={handleClickEdit}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
