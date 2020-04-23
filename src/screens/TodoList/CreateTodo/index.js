@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import {createTodoAction} from '../../../store/todoList/slice';
 import FormInput from '../../../components/FormInput';
+import FormInputNumber from '../../../components/FormInputNumber';
 import DatePicker from '../../../components/DatePicker';
 
 const schema = Yup.object().shape({
@@ -19,13 +20,14 @@ const schema = Yup.object().shape({
     .max(5, 'Value should be from 0 to 5'),
 });
 
-const CreateTodo = () => {
+const CreateTodo = ({navigation}) => {
   const dispatch = useDispatch();
   const onSubmit = useCallback(
     (values) => {
       dispatch(createTodoAction(values));
+      navigation.navigate('Todo list');
     },
-    [dispatch],
+    [dispatch, navigation],
   );
 
   return (
@@ -35,7 +37,7 @@ const CreateTodo = () => {
           title: '',
           due: '',
           description: '',
-          priority: 0,
+          priority: undefined,
         }}
         validationSchema={schema}
         onSubmit={onSubmit}>
@@ -69,13 +71,12 @@ const CreateTodo = () => {
               placeholder="Enter due date"
               errorMessage={errors.title}
             />
-            <FormInput
+            <FormInputNumber
               label="Priority"
-              value={values.priority}
-              onChangeText={handleChange('priority')}
-              keyboardType="numeric"
-              placeholder="Enter priority (from 0 to 5)"
               errorMessage={errors.priority}
+              value={values.priority}
+              onChange={(value) => setFieldValue('priority', value)}
+              placeholder="Enter priority (from 0 to 5)"
             />
             <View style={styles.buttonContainer}>
               <Button

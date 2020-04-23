@@ -4,7 +4,7 @@ import {Input} from 'react-native-elements';
 
 const FormInput = (props) => (
   <View style={styles.inputContainer}>
-    <Input {...props} />
+    <Input {...props} placeholderTextColor="grey" />
   </View>
 );
 

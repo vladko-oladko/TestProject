@@ -1,10 +1,14 @@
 import React from 'react';
-import {string, instanceOf, number, shape} from 'prop-types';
-import {StyleSheet, View, Text} from 'react-native';
+import {string, number, shape} from 'prop-types';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import moment from 'moment';
 
-const TodoItem = ({data}) => {
+const TodoItem = ({data, onPressEdit}) => {
   const {title, description, due, priority} = data;
+
+  const handlePressEdit = () => {
+    onPressEdit(data);
+  };
 
   return (
     <View style={styles.container}>
@@ -16,6 +20,9 @@ const TodoItem = ({data}) => {
         <Text>{description}</Text>
       </View>
       <View style={[styles.row, styles.priority]}>
+        <TouchableOpacity onPress={handlePressEdit}>
+          <Text style={styles.link}>Edit</Text>
+        </TouchableOpacity>
         <Text>Priority {priority} / 5</Text>
       </View>
     </View>
@@ -50,7 +57,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   priority: {
-    justifyContent: 'flex-end',
+    marginTop: 5,
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  link: {
+    color: '#0366d6',
   },
 });
 
@@ -58,7 +70,7 @@ TodoItem.propTypes = {
   data: shape({
     title: string,
     description: string,
-    due: instanceOf(Date),
+    due: string,
     priority: number,
   }),
 };
