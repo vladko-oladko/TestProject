@@ -1,8 +1,8 @@
 import {createAction} from '@reduxjs/toolkit';
 import {put, takeEvery, call} from 'redux-saga/effects';
-import {setLoginStatusAction, setUserName} from './slice';
-import {getLoginStatus, setLoginStatus, requestAPI} from '../../services'
-
+import {setLoginStatusAction} from './slice';
+import {saveShowSpinnerStatusAction} from '../global/slice';
+import {getLoginStatus, setLoginStatus, requestAPI} from '../../services';
 
 export const loginAction = createAction('user/login');
 export const logoutAction = createAction('user/logout');
@@ -11,7 +11,7 @@ export const initUserLoginStatusAction = createAction(
 );
 
 function* login({payload: {userName, password}}) {
-  // yield put(setLoginStatusAction(getTodoItems()));
+  yield put(saveShowSpinnerStatusAction(true));
   const response = yield call(
     requestAPI,
     'https://portal.poimapper.com/json/auth/todo/login',
@@ -30,12 +30,16 @@ function* login({payload: {userName, password}}) {
     setLoginStatus(true);
   }
 
-  console.log(response, 'RESPONSE');
+  yield put(saveShowSpinnerStatusAction(false));
 }
 
 function* logout() {
+  yield put(saveShowSpinnerStatusAction(true));
+
   yield put(setLoginStatusAction(false));
   setLoginStatus(false);
+
+  yield put(saveShowSpinnerStatusAction(false));
 }
 
 function* initUserLoginStatus() {

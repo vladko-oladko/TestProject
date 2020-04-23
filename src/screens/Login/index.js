@@ -4,6 +4,7 @@ import {StyleSheet, View, TextInput, Button, SafeAreaView} from 'react-native';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
 import {loginAction} from '../../store/user/sagas';
+import FormInput from '../../components/FormInput';
 
 const schema = Yup.object().shape({
   userName: Yup.string().required('Required'),
@@ -20,30 +21,29 @@ const Login = () => {
   return (
     <SafeAreaView style={styles.wrap}>
       <Formik
+        validateOnMount
         initialValues={{
-          login: null,
+          userName: null,
           password: null,
         }}
         validationSchema={schema}
         onSubmit={handleLoginPress}>
         {({values, handleChange, handleSubmit, isValid}) => (
           <View style={styles.container}>
-            <TextInput
-              style={styles.input}
+            <FormInput
+              value={values.userName}
               onChangeText={handleChange('userName')}
-              value={values.login}
-              textContentType="username"
               placeholder="User name"
             />
-            <TextInput
-              style={styles.input}
-              onChangeText={handleChange('password')}
+            <FormInput
               value={values.password}
-              secureTextEntry
-              textContentType="password"
+              onChangeText={handleChange('password')}
               placeholder="Password"
+              secureTextEntry
             />
+            <View style={styles.buttonContainer}>
             <Button title="Login" onPress={handleSubmit} disabled={!isValid} />
+            </View>
           </View>
         )}
       </Formik>
@@ -56,16 +56,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  buttonContainer: {
+    margin: 12,
+  },
   container: {
     width: '80%',
     marginLeft: '10%',
-  },
-  input: {
-    height: 40,
-    borderWidth: 1,
-    borderRadius: 4,
-    marginBottom: 10,
-    borderColor: 'gray',
   },
 });
 

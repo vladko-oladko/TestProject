@@ -2,9 +2,10 @@ import React, {useEffect, useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Button, Text} from 'react-native';
+import {Button, ActivityIndicator} from 'react-native';
 import {initUserLoginStatusAction, logoutAction} from '../../store/user/sagas';
 import {selectIsLoggedUser} from '../../store/user/selectors';
+import {selectIsShownSpinner} from '../../store/global/selectors';
 
 import Login from '../Login';
 import TodoList from '../TodoList';
@@ -15,6 +16,7 @@ const Main = () => {
   const Stack = useMemo(() => createStackNavigator(), []);
   const dispatch = useDispatch();
   const isLoggedUser = useSelector(selectIsLoggedUser);
+  const isLoading = useSelector(selectIsShownSpinner);
 
   const handleLogout = useCallback(() => {
     dispatch(logoutAction());
@@ -25,7 +27,8 @@ const Main = () => {
   }, []);
 
   return (
-    (isLoggedUser === null && <Text>Init...</Text>) || (
+    isLoggedUser === null ||
+    (isLoading && <ActivityIndicator size="large" />) || (
       <>
         {isLoggedUser && <Button title="Logout" onPress={handleLogout} />}
         <NavigationContainer>
