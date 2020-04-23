@@ -1,9 +1,9 @@
 import React, {useCallback} from 'react';
+import {useDispatch} from 'react-redux';
 import {StyleSheet, View, TextInput, Button, SafeAreaView} from 'react-native';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
-import {requestAPI} from '../../services/index';
-import {setLoginStatus} from '../../services/loginStatus';
+import {loginAction} from '../../store/user/sagas';
 
 const schema = Yup.object().shape({
   userName: Yup.string().required('Required'),
@@ -11,20 +11,10 @@ const schema = Yup.object().shape({
 });
 
 const Login = () => {
-  const handleLoginPress = useCallback(async ({userName, password}) => {
-    const response = await requestAPI(
-      'https://portal.poimapper.com/json/auth/todo/login',
-      {
-        method: 'POST',
-        body: {
-          userName,
-          password,
-        },
-        errMessage: 'Login failed',
-      },
-    );
+  const dispatch = useDispatch();
 
-    setLoginStatus(!!response);
+  const handleLoginPress = useCallback(async (loginData) => {
+    dispatch(loginAction(loginData));
   }, []);
 
   return (
