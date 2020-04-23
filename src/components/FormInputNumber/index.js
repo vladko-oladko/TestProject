@@ -27,8 +27,14 @@ const styles = StyleSheet.create({
   },
 });
 
+FormInputNumber.defaultProps = {
+  value: null,
+  onChange: () => {},
+}
+
 FormInputNumber.propTypes = {
   value: PropTypes.number,
+  onChange: PropTypes.func,
 };
 
 export default FormInputNumber;

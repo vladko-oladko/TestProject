@@ -60,6 +60,13 @@ const DatePickerInput = ({value, onChange, placeholder, label}) => {
   );
 };
 
+DatePickerInput.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+}
+
 const styles = StyleSheet.create({
   modalContainer: {
     justifyContent: 'flex-end',

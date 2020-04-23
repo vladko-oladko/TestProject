@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-export const requestAPI = (url, {body, errMessage, ...options} = {}) => {
+export const requestAPI = (url: string, {body, errMessage, ...options} = {}): Promise<any> => {
   const headers = options.headers ? new Headers(options.headers) : {};
 
   const fetchOptions = {

@@ -20,3 +20,6 @@ export const createStore = () => {
 
   return store;
 };
+
+
+export type RootState = ReturnType<typeof reducer>
