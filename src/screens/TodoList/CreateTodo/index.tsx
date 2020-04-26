@@ -22,10 +22,16 @@ const CreateTodo: React.FC<Props> = ({navigation}) => {
   const onSubmit = useCallback(
     (values) => {
       dispatch(createTodoAction(values));
-      navigation.navigate('Todo list');
+      navigation.navigate('TodoList');
     },
     [dispatch, navigation],
   );
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Create todo',
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView>

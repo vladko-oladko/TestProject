@@ -7,6 +7,7 @@ import {fetchTodoListAction} from '../../store/todoList/sagas';
 import {ToDoInterface} from '../../common/interfaces/todo';
 import {ParamList} from '../../common/types/navigation';
 import TodoItem from './TodoItem';
+import { logoutAction } from '../../store/user/sagas';
 
 export interface Props {
   navigation: StackNavigationProp<ParamList, 'TodoList'>
@@ -24,6 +25,10 @@ const TodoList: React.FC<Props> = ({navigation}) => {
     navigation.navigate('CreateTodo');
   }, [navigation]);
 
+  const handleClickLogout = useCallback(() => {
+    dispatch(logoutAction());
+  }, [dispatch]);
+
   const handleClickEdit = useCallback(
     (todoData) => {
       navigation.navigate('EditTodo', {
@@ -35,6 +40,9 @@ const TodoList: React.FC<Props> = ({navigation}) => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
+      headerTitleAlign: 'center',
+      title: 'Todo list',
+      headerLeft: () =>  <Button onPress={handleClickLogout} title="Logout" />,
       headerRight: () => <Button onPress={handleClickCreate} title="New" />,
     });
   }, [navigation, handleClickCreate]);

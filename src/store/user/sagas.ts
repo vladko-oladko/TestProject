@@ -1,17 +1,17 @@
 import {createAction, PayloadAction} from '@reduxjs/toolkit';
 import {put, takeEvery, call} from 'redux-saga/effects';
+import { AnyAction } from 'redux'
 import {setLoginStatusAction} from './slice';
 import {saveShowSpinnerStatusAction} from '../global/slice';
 import {getLoginStatus, setLoginStatus, requestAPI} from '../../services';
 import {UserInterface} from '../../common/interfaces';
-
-export const loginAction = createAction('user/login');
+export const loginAction = createAction<PayloadAction<UserInterface>>('user/login');
 export const logoutAction = createAction('user/logout');
 export const initUserLoginStatusAction = createAction(
   'user/initUserLoginStatus',
 );
 
-function* login({payload: {userName, password}}: PayloadAction<UserInterface>) {
+function* login({payload: {userName, password}}: AnyAction) {
   yield put(saveShowSpinnerStatusAction(true));
   const response = yield call(
     requestAPI,
@@ -49,8 +49,7 @@ function* initUserLoginStatus() {
 }
 
 export default [
-  takeEvery(loginAction, login),
   takeEvery(logoutAction, logout),
-
+  takeEvery(loginAction, login),
   takeEvery(initUserLoginStatusAction, initUserLoginStatus),
 ];

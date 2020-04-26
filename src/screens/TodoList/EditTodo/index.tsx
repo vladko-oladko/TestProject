@@ -28,10 +28,16 @@ const EditTodo: React.FC<Props> = ({route, navigation}) => {
   const onSubmit = useCallback(
     (values) => {
       dispatch(editTodoAction({id: todoData.id, ...values}));
-      navigation.navigate('Todo list');
+      navigation.navigate('TodoList');
     },
     [dispatch, navigation, todoData],
   );
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Edit todo',
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView>

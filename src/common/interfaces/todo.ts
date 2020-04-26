@@ -1,7 +1,7 @@
 export interface ToDoInterface {
     description: string;
-    due: string;
+    due?: string;
     id: string;
-    priority: number;
+    priority?: number;
     title: string;
 }

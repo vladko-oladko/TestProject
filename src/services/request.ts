@@ -1,5 +1,6 @@
-/* eslint-disable no-undef */
-export const requestAPI = (url: string, {body, errMessage, ...options} = {}): Promise<any> => {
+declare function alert(msg: string):undefined;
+
+export const requestAPI = (url: string, {body, errMessage, ...options}: any = {}): Promise<any> => {
   const headers = options.headers ? new Headers(options.headers) : {};
 
   const fetchOptions = {

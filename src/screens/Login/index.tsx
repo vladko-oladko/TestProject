@@ -5,11 +5,7 @@ import * as Yup from 'yup';
 import {Formik} from 'formik';
 import {loginAction} from '../../store/user/sagas';
 import FormInput from '../../components/FormInput';
-
-const schema = Yup.object().shape({
-  userName: Yup.string().required('Required'),
-  password: Yup.string().required('Required'),
-});
+import { loginSchema } from '../../common/schemas/login';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
@@ -26,7 +22,7 @@ const Login: React.FC = () => {
           userName: '',
           password: '',
         }}
-        validationSchema={schema}
+        validationSchema={loginSchema}
         onSubmit={handleLoginPress}>
         {({values, handleChange, handleSubmit, isValid}) => (
           <View style={styles.container}>

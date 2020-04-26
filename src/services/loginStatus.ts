@@ -11,7 +11,7 @@ export async function setLoginStatus(status: boolean): Promise<void> {
 export async function getLoginStatus(): Promise<boolean> {
   try {
     const isActive = await AsyncStorage.getItem('isUserLoggedIn');
-    return !!JSON.parse(isActive);
+    return !!JSON.parse(isActive || '');
   } catch (error) {
     console.error('Something went wrong', error);
   }

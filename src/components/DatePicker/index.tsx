@@ -12,7 +12,7 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 
 interface Props {
-  value: Date | string,
+  value: Date | string | undefined,
   placeholder: string | Element;
   label: string | Element;
   onChange: (date: Date) => void;

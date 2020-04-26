@@ -2,17 +2,26 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ToDoInterface} from './../../common/interfaces/todo';
 import shortid from 'shortid';
 
+
+export interface TodoListStateInterface {
+  data: ToDoInterface[];
+}
+
+const initialState: TodoListStateInterface = {
+  data: [],
+}
+
+
 const todoListSlice = createSlice({
   name: 'todoList',
-  initialState: [],
+  initialState,
   reducers: {
-    saveTodoList(state, {payload: todoList}: PayloadAction<[ToDoInterface]>) {
-      console.log(todoList)
-      return todoList;
+    saveTodoList(state: TodoListStateInterface, {payload: todoList}: PayloadAction<ToDoInterface[]>) {
+      state.data = todoList;
     },
-    editTodo(state, {payload: todo}: PayloadAction<ToDoInterface>) {
+    editTodo(state: TodoListStateInterface, {payload: todo}: PayloadAction<ToDoInterface>) {
       const {id} = todo;
-      return state.map((item) => {
+      state.data = state.data.map((item) => {
         if (item.id === id) {
           return todo;
         }
@@ -20,7 +29,7 @@ const todoListSlice = createSlice({
       });
     },
     createTodo(state, {payload: todo}: PayloadAction<ToDoInterface>) {
-      state.push({id: shortid(), ...todo});
+      state.data.push({id: shortid(), ...todo});
     },
   },
 });
