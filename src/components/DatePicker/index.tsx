@@ -8,10 +8,18 @@ import {
   View,
   Button,
 } from 'react-native';
-import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
 
-const DatePickerInput = ({value, onChange, placeholder, label}) => {
+interface Props {
+  value: Date | string,
+  placeholder: string | Element;
+  label: string | Element;
+  onChange: (date: Date) => void;
+  errorMessage: any;
+}
+
+const DatePickerInput: React.FC<Props> = ({value, onChange, placeholder, label}) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -60,13 +68,6 @@ const DatePickerInput = ({value, onChange, placeholder, label}) => {
   );
 };
 
-DatePickerInput.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-}
-
 const styles = StyleSheet.create({
   modalContainer: {
     justifyContent: 'flex-end',
@@ -112,11 +113,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-DatePickerInput.defaultProps = {
-  value: PropTypes.instanceOf(Date),
-  onChange: PropTypes.func,
-  placeholder: PropTypes.string,
-};
 
 export default DatePickerInput;

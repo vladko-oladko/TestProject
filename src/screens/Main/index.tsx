@@ -12,39 +12,35 @@ import TodoList from '../TodoList';
 import CreateTodo from '../TodoList/CreateTodo';
 import EditTodo from '../TodoList/EditTodo';
 
-const Main = () => {
+const Main: React.FC = () => {
   const Stack = useMemo(() => createStackNavigator(), []);
   const dispatch = useDispatch();
   const isLoggedUser = useSelector(selectIsLoggedUser);
   const isLoading = useSelector(selectIsShownSpinner);
 
-  const handleLogout = useCallback(() => {
-    dispatch(logoutAction());
-  }, []);
-
   useEffect(() => {
     dispatch(initUserLoginStatusAction());
   }, []);
 
+  if (isLoading) {
+    return <ActivityIndicator size="large" />
+  }
+
   return (
-    isLoggedUser === null ||
-    (isLoading && <ActivityIndicator size="large" />) || (
-      <>
-        {isLoggedUser && <Button title="Logout" onPress={handleLogout} />}
-        <NavigationContainer>
-          <Stack.Navigator>
-            {(isLoggedUser && (
-              <>
-                <Stack.Screen name="Todo list" component={TodoList} />
-                <Stack.Screen name="Create todo" component={CreateTodo} />
-                <Stack.Screen name="Edit todo" component={EditTodo} />
-              </>
-            )) || <Stack.Screen name="Login" component={Login} />}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </>
-    )
-  );
+    <>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {isLoggedUser ? (
+            <>
+              <Stack.Screen name="TodoList" component={TodoList} />
+              <Stack.Screen name="CreateTodo" component={CreateTodo} />
+              <Stack.Screen name="EditTodo" component={EditTodo} />
+            </>
+          ) : <Stack.Screen name="Login" component={Login} />}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
+  )
 };
 
 export default Main;

@@ -3,8 +3,16 @@ import PropTypes from 'prop-types';
 import {StyleSheet, View} from 'react-native';
 import {Input} from 'react-native-elements';
 
-const FormInputNumber = ({value, onChange, ...props}) => {
-  const handleChangeText = (textValue) => {
+interface Props {
+  value: number | undefined;
+  label: string;
+  onChange: (value: number) => void;
+  placeholder: string | undefined;
+  errorMessage: any;
+}
+
+const FormInputNumber: React.FC<Props> = ({value, onChange,  ...props}) => {
+  const handleChangeText = (textValue: string) => {
     onChange(+textValue);
   };
 
@@ -26,15 +34,5 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
-
-FormInputNumber.defaultProps = {
-  value: null,
-  onChange: () => {},
-}
-
-FormInputNumber.propTypes = {
-  value: PropTypes.number,
-  onChange: PropTypes.func,
-};
 
 export default FormInputNumber;

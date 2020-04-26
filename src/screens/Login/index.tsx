@@ -11,7 +11,7 @@ const schema = Yup.object().shape({
   password: Yup.string().required('Required'),
 });
 
-const Login = () => {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
 
   const handleLoginPress = useCallback(async (loginData) => {
@@ -23,8 +23,8 @@ const Login = () => {
       <Formik
         validateOnMount
         initialValues={{
-          userName: null,
-          password: null,
+          userName: '',
+          password: '',
         }}
         validationSchema={schema}
         onSubmit={handleLoginPress}>
@@ -34,11 +34,13 @@ const Login = () => {
               value={values.userName}
               onChangeText={handleChange('userName')}
               placeholder="User name"
+              autoCapitalize="none"
             />
             <FormInput
               value={values.password}
               onChangeText={handleChange('password')}
               placeholder="Password"
+              autoCapitalize="none"
               secureTextEntry
             />
             <View style={styles.buttonContainer}>

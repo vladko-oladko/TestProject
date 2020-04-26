@@ -1,4 +1,4 @@
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export async function setLoginStatus(status: boolean): Promise<void> {
   try {

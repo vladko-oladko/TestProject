@@ -1,9 +1,14 @@
 import React from 'react';
-import {string, number, shape} from 'prop-types';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import moment from 'moment';
+import {ToDoInterface} from '../../../common/interfaces/todo';
 
-const TodoItem = ({data, onPressEdit}) => {
+interface Props {
+  data: ToDoInterface,
+  onPressEdit: (data: ToDoInterface) => void;
+}
+
+const TodoItem: React.FC<Props> = ({data, onPressEdit}) => {
   const {title, description, due, priority} = data;
 
   const handlePressEdit = () => {
@@ -65,14 +70,5 @@ const styles = StyleSheet.create({
     color: '#0366d6',
   },
 });
-
-TodoItem.propTypes = {
-  data: shape({
-    title: string,
-    description: string,
-    due: string,
-    priority: number,
-  }),
-};
 
 export default TodoItem;
