@@ -1,33 +1,43 @@
 import React, {useCallback} from 'react';
 import {useDispatch} from 'react-redux';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
 import {SafeAreaView, StyleSheet, View, Button} from 'react-native';
 import {Formik} from 'formik';
-import * as Yup from 'yup';
 import moment from 'moment';
 
 import {editTodoAction} from '../../../store/todoList/slice';
 import FormInput from '../../../components/FormInput';
 import FormInputNumber from '../../../components/FormInputNumber';
 import DatePicker from '../../../components/DatePicker';
+import {todoSchema} from '../../../common/schemas/todo';
+import {ParamList} from '../../../common/types/navigation';
 
-const schema = Yup.object().shape({
-  title: Yup.string().required('Required'),
-  description: Yup.string().required('Required'),
-  due: Yup.string(),
-  priority: Yup.number().min(0).max(5),
-});
+type ProfileScreenNavigationProp = StackNavigationProp<ParamList, 'EditTodo'>;
+type ProfileScreenRouteProp = RouteProp<ParamList, 'EditTodo'>;
 
-const EditTodo = ({route, navigation}) => {
+interface Props {
+  navigation: ProfileScreenNavigationProp;
+  route: ProfileScreenRouteProp;
+}
+
+const EditTodo: React.FC<Props> = ({route, navigation}) => {
   const dispatch = useDispatch();
   const {todoData} = route.params;
 
   const onSubmit = useCallback(
     (values) => {
       dispatch(editTodoAction({id: todoData.id, ...values}));
-      navigation.navigate('Todo list');
+      navigation.navigate('TodoList');
     },
     [dispatch, navigation, todoData],
   );
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Edit todo',
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView>
@@ -38,47 +48,44 @@ const EditTodo = ({route, navigation}) => {
           description: todoData.description,
           priority: todoData.priority,
         }}
-        validationSchema={schema}
+        validationSchema={todoSchema}
         onSubmit={onSubmit}>
-        {({values, handleChange, handleSubmit, setFieldValue, isValid}) => (
+        {({values, handleChange, handleSubmit, setFieldValue, isValid, errors}) => (
           <>
             <FormInput
+              label="Title *"
               value={values.title}
               onChangeText={handleChange('title')}
               placeholder="Enter title *"
+              errorMessage={errors.title}
             />
             <FormInput
+              label="Description *"
               value={values.description}
               onChangeText={handleChange('description')}
               placeholder="Enter description *"
+              errorMessage={errors.description}
             />
             <DatePicker
+              label="Due date"
               value={values.due}
               onChange={(date) => setFieldValue('due', moment(date).format())}
               placeholder="Enter due date"
+              errorMessage={errors.due}
             />
             <FormInputNumber
+              label="Priority"
               value={values.priority}
-              onChange={(value) => setFieldValue('priority', value)}
+              onChange={(value: number) => setFieldValue('priority', value)}
               placeholder="Enter priority"
+              errorMessage={errors.priority}
             />
-            <View style={styles.buttonContainer}>
-              <Button title="Edit" onPress={handleSubmit} disabled={!isValid} />
-            </View>
+            <Button title="Edit" onPress={handleSubmit} disabled={!isValid} />
           </>
         )}
       </Formik>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollViewContainer: {
-    paddingHorizontal: 10,
-  },
-  scrollView: {
-    height: '100%',
-  },
-});
 
 export default EditTodo;

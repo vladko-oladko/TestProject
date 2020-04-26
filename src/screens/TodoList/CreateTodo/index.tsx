@@ -1,34 +1,37 @@
 import React, {useCallback} from 'react';
 import {useDispatch} from 'react-redux';
-import {SafeAreaView, StyleSheet, View, Button} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {SafeAreaView, Button} from 'react-native';
 import {Formik} from 'formik';
-import * as Yup from 'yup';
 import moment from 'moment';
 
 import {createTodoAction} from '../../../store/todoList/slice';
 import FormInput from '../../../components/FormInput';
 import FormInputNumber from '../../../components/FormInputNumber';
 import DatePicker from '../../../components/DatePicker';
+import {todoSchema} from '../../../common/schemas/todo'
+import {ParamList} from '../../../common/types/navigation';
 
-const schema = Yup.object().shape({
-  title: Yup.string().min(1).required('Title is required'),
-  description: Yup.string().min(1).required('Title is required'),
-  due: Yup.string(),
-  priority: Yup.number()
-    .typeError('Priority must be a number (0 - 5)')
-    .min(0, 'Value should be from 0 to 5')
-    .max(5, 'Value should be from 0 to 5'),
-});
+type ProfileScreenNavigationProp = StackNavigationProp<ParamList, 'CreateTodo'>;
 
-const CreateTodo = ({navigation}) => {
+interface Props {
+  navigation: ProfileScreenNavigationProp;
+}
+const CreateTodo: React.FC<Props> = ({navigation}) => {
   const dispatch = useDispatch();
   const onSubmit = useCallback(
     (values) => {
       dispatch(createTodoAction(values));
-      navigation.navigate('Todo list');
+      navigation.navigate('TodoList');
     },
     [dispatch, navigation],
   );
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Create todo',
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView>
@@ -39,7 +42,7 @@ const CreateTodo = ({navigation}) => {
           description: '',
           priority: undefined,
         }}
-        validationSchema={schema}
+        validationSchema={todoSchema}
         onSubmit={onSubmit}>
         {({
           values,
@@ -75,30 +78,19 @@ const CreateTodo = ({navigation}) => {
               label="Priority"
               errorMessage={errors.priority}
               value={values.priority}
-              onChange={(value) => setFieldValue('priority', value)}
+              onChange={(value: number) => setFieldValue('priority', value)}
               placeholder="Enter priority (from 0 to 5)"
             />
-            <View style={styles.buttonContainer}>
-              <Button
-                title="Create"
-                onPress={handleSubmit}
-                disabled={!isValid}
-              />
-            </View>
+            <Button
+              title="Create"
+              onPress={handleSubmit}
+              disabled={!isValid}
+            />
           </>
         )}
       </Formik>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollViewContainer: {
-    paddingHorizontal: 10,
-  },
-  scrollView: {
-    height: '100%',
-  },
-});
 
 export default CreateTodo;

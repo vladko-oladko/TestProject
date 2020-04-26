@@ -1,11 +1,19 @@
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {SafeAreaView, StyleSheet, ScrollView, Button} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {selectTodoList} from '../../store/todoList/selectors';
 import {fetchTodoListAction} from '../../store/todoList/sagas';
+import {ToDoInterface} from '../../common/interfaces/todo';
+import {ParamList} from '../../common/types/navigation';
 import TodoItem from './TodoItem';
+import { logoutAction } from '../../store/user/sagas';
 
-const TodoList = ({navigation}) => {
+export interface Props {
+  navigation: StackNavigationProp<ParamList, 'TodoList'>
+}
+
+const TodoList: React.FC<Props> = ({navigation}) => {
   const dispatch = useDispatch();
   const todoItems = useSelector(selectTodoList);
 
@@ -14,12 +22,16 @@ const TodoList = ({navigation}) => {
   }, [dispatch]);
 
   const handleClickCreate = useCallback(() => {
-    navigation.navigate('Create todo');
+    navigation.navigate('CreateTodo');
   }, [navigation]);
+
+  const handleClickLogout = useCallback(() => {
+    dispatch(logoutAction());
+  }, [dispatch]);
 
   const handleClickEdit = useCallback(
     (todoData) => {
-      navigation.navigate('Edit todo', {
+      navigation.navigate('EditTodo', {
         todoData,
       });
     },
@@ -28,6 +40,9 @@ const TodoList = ({navigation}) => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
+      headerTitleAlign: 'center',
+      title: 'Todo list',
+      headerLeft: () =>  <Button onPress={handleClickLogout} title="Logout" />,
       headerRight: () => <Button onPress={handleClickCreate} title="New" />,
     });
   }, [navigation, handleClickCreate]);
@@ -37,7 +52,7 @@ const TodoList = ({navigation}) => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContainer}>
-        {todoItems.map((element) => (
+        {todoItems.map((element: ToDoInterface) => (
           <TodoItem
             data={element}
             key={element.id}
